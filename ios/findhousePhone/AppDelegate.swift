@@ -40,7 +40,13 @@ class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
 
   override func bundleURL() -> URL? {
 #if DEBUG
-    RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
+    // 确保 Metro bundler 正在运行
+    let url = RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
+    // 如果返回 nil，尝试使用 localhost
+    if url == nil {
+      return URL(string: "http://localhost:8081/index.bundle?platform=ios&dev=true")
+    }
+    return url
 #else
     Bundle.main.url(forResource: "main", withExtension: "jsbundle")
 #endif
