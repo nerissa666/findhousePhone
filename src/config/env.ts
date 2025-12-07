@@ -9,8 +9,10 @@
 // 开发环境配置
 const ENV_CONFIG = {
   // API 配置
-  API_BASE_URL: 'https://124.71.203.87/findhouseServer',
-  IMAGE_BASE_URL: 'https://124.71.203.87/findhouseServer',
+  // API_BASE_URL: 'https://124.71.203.87/findhouseServer',
+  API_BASE_URL: 'http://localhost:8080',
+  // IMAGE_BASE_URL: 'https://124.71.203.87/findhouseServer',
+  IMAGE_BASE_URL: 'http://localhost:8080',
 
   // 环境标识
   ENV: __DEV__ ? 'development' : 'production',

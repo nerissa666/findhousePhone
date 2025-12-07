@@ -11,9 +11,9 @@ import {
   ScrollView,
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/AppNavigator';
-import { CounterExample } from '../components/CounterExample';
-import { GluestackExample } from '../components/GluestackExample';
+import { RootStackParamList } from '@/navigation/AppNavigator';
+import { CounterExample } from '@/components/CounterExample';
+import { GluestackExample } from '@/components/GluestackExample';
 
 type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 

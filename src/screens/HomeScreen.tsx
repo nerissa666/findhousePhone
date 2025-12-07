@@ -4,22 +4,65 @@
 
 import React from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
+import { Button } from '../components/ui';
 import Carousel from '../components/Carousel';
 import Menu from '../components/Menu';
 import GroupRent from '../components/GroupRent';
 import News from '../components/News';
+import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import type { CompositeScreenProps } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import type { RootStackParamList } from '../navigation/AppNavigator';
-
-type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
-
+import type {
+  RootStackParamList,
+  TabParamList,
+} from '../navigation/AppNavigator';
+import FragmentWrap from '../components/FragmentWrap';
+type HomeScreenProps = CompositeScreenProps<
+  BottomTabScreenProps<TabParamList, 'Home'>,
+  NativeStackScreenProps<RootStackParamList>
+>;
+const list = [
+  {
+    name: '整租',
+    icon: '房子',
+    navigator: 'FindHouse',
+  },
+  {
+    name: '合租',
+    icon: 'my',
+    navigator: 'FindHouse',
+  },
+  {
+    name: '地图找房',
+    icon: 'map',
+    navigator: 'MyMap',
+  },
+  {
+    name: '去出租',
+    icon: 'house',
+    navigator: 'PublishHouse',
+  },
+];
 export default function HomeScreen(_props: HomeScreenProps): React.JSX.Element {
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} className="bg-white">
       <Carousel />
-      <Menu />
-      <GroupRent />
-      <News />
+      <Menu list={list} />
+      <FragmentWrap
+        title="租房小组"
+        extra={
+          <Button onPress={() => { }} className="px-3 py-1 rounded-md">
+            <Button.Text className="text-sm">更多</Button.Text>
+          </Button>
+        }
+      >
+        <GroupRent />
+      </FragmentWrap>
+      <FragmentWrap
+        title="最新资讯"
+      >
+        <News />
+      </FragmentWrap>
     </ScrollView>
   );
 }
@@ -27,7 +70,7 @@ export default function HomeScreen(_props: HomeScreenProps): React.JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    // backgroundColor 已通过 className="bg-white" 设置，避免覆盖
   },
   content: {
     padding: 20,

@@ -1,0 +1,25 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/iconfont.css",
+      "sha1": "31f155523cf444058237ca00509a6e67754fc39c"
+    },
+    {
+      "path": "assets/fonts/iconfont.eot",
+      "sha1": "1b554f9690414b4cb54cbbcff53de88b2db35e39"
+    },
+    {
+      "path": "assets/fonts/iconfont.svg",
+      "sha1": "63b72f9eb4ac5d32df27e2f74f4f8bbf49e465a6"
+    },
+    {
+      "path": "assets/fonts/iconfont.ttf",
+      "sha1": "25219ebce8a51a271b0eab63ad6a229bd870b3ea"
+    },
+    {
+      "path": "assets/fonts/iconfont.woff",
+      "sha1": "4f3db5834188cfefe939a18423740070057999e2"
+    }
+  ]
+}

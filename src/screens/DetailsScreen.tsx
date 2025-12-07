@@ -3,9 +3,9 @@
  */
 
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {RootStackParamList} from '../navigation/AppNavigator';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/AppNavigator';
 
 type DetailsScreenProps = NativeStackScreenProps<RootStackParamList, 'Details'>;
 
@@ -13,7 +13,7 @@ export function DetailsScreen({
   route,
   navigation,
 }: DetailsScreenProps): React.JSX.Element {
-  const {itemId, title} = route.params;
+  const { itemId, title } = route.params;
 
   return (
     <View style={styles.container}>
@@ -29,7 +29,8 @@ export function DetailsScreen({
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.goBack()}>
+          onPress={() => navigation.goBack()}
+        >
           <Text style={styles.buttonText}>返回</Text>
         </TouchableOpacity>
       </View>
@@ -87,4 +88,3 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
-

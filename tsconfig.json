@@ -1,6 +1,6 @@
 {
   "extends": "@react-native/typescript-config",
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "nativewind-env.d.ts"],
   "exclude": ["**/node_modules", "**/Pods"],
   "compilerOptions": {
     // ========== 严格类型检查 ==========
@@ -12,7 +12,6 @@
     "strictPropertyInitialization": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
-
     // ========== 类型安全增强 ==========
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -21,7 +20,6 @@
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
     "exactOptionalPropertyTypes": true,
-
     // ========== 其他选项 ==========
     "jsx": "react-native",
     "moduleResolution": "bundler",
@@ -30,6 +28,11 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    // ========== 路径别名配置 ==========
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   }
 }

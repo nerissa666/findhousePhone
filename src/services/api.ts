@@ -10,11 +10,10 @@ import axios, {
   AxiosError,
 } from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_BASE_URL } from '../config/env';
 
 // API 基础配置
-const BASE_URL = __DEV__
-  ? 'http://localhost:3000/api' // 开发环境
-  : 'https://api.example.com'; // 生产环境
+const BASE_URL = API_BASE_URL;
 
 // Token 存储键名
 const TOKEN_KEY = '@auth_token';
@@ -57,23 +56,50 @@ api.interceptors.request.use(
   },
 );
 
+// API 响应数据结构
+interface ApiResponseWrapper {
+  body?: unknown;
+  description?: string;
+  status?: number;
+}
+
+// 业务响应数据结构（包含 code 的情况）
+interface BusinessResponse {
+  code: number;
+  data?: unknown;
+  message?: string;
+}
+
 // 响应拦截器
 api.interceptors.response.use(
   (response: AxiosResponse) => {
     // 对响应数据做处理
-    const { data } = response;
+    console.log(response, 'response api');
+    const responseData = response.data as ApiResponseWrapper;
+    const body = responseData.body;
 
     // 如果后端返回的数据格式是 { code, data, message }
-    if (data && typeof data === 'object' && 'code' in data) {
-      if (data.code === 200 || data.code === 0) {
-        return data.data || data;
+    if (body && typeof body === 'object' && 'code' in body) {
+      const businessResponse = body as BusinessResponse;
+      if (businessResponse.code === 200 || businessResponse.code === 0) {
+        // 返回处理后的数据，但保持 response 结构以便类型系统识别
+        return {
+          ...response,
+          data: businessResponse.data || body,
+        } as AxiosResponse;
       } else {
         // 业务错误
-        return Promise.reject(new Error(data.message || '请求失败'));
+        return Promise.reject(
+          new Error(responseData.description || businessResponse.message || '请求失败'),
+        );
       }
     }
 
-    return data;
+    // 返回处理后的数据
+    return {
+      ...response,
+      data: body || responseData,
+    } as AxiosResponse;
   },
   async (error: AxiosError) => {
     // 响应错误处理
@@ -98,7 +124,8 @@ api.interceptors.response.use(
           return Promise.reject(new Error('服务器错误，请稍后重试'));
 
         default:
-          const message = (data as any)?.message || `请求失败 (${status})`;
+          const errorData = data as { message?: string; description?: string } | undefined;
+          const message = errorData?.message || errorData?.description || `请求失败 (${status})`;
           return Promise.reject(new Error(message));
       }
     } else if (error.request) {
@@ -139,4 +166,72 @@ export const tokenManager = {
   },
 };
 
-export default api;
+// 创建类型安全的 API 包装器接口
+interface TypedApiInstance {
+  get<T>(
+    url: string,
+    config?: Partial<InternalAxiosRequestConfig>,
+  ): Promise<T>;
+  post<T>(
+    url: string,
+    data?: Record<string, string | number | boolean | null>,
+    config?: Partial<InternalAxiosRequestConfig>,
+  ): Promise<T>;
+  put<T>(
+    url: string,
+    data?: Record<string, string | number | boolean | null>,
+    config?: Partial<InternalAxiosRequestConfig>,
+  ): Promise<T>;
+  delete<T>(
+    url: string,
+    config?: Partial<InternalAxiosRequestConfig>,
+  ): Promise<T>;
+  patch<T>(
+    url: string,
+    data?: Record<string, string | number | boolean | null>,
+    config?: Partial<InternalAxiosRequestConfig>,
+  ): Promise<T>;
+}
+
+// 类型安全的 API 实例
+const typedApi: TypedApiInstance = {
+  get: <T>(url: string, config?: Partial<InternalAxiosRequestConfig>) => {
+    return api.get<T, AxiosResponse<T>>(url, config as InternalAxiosRequestConfig).then(
+      response => response.data as T,
+    );
+  },
+  post: <T>(
+    url: string,
+    data?: Record<string, string | number | boolean | null>,
+    config?: Partial<InternalAxiosRequestConfig>,
+  ) => {
+    return api.post<T, AxiosResponse<T>>(url, data, config as InternalAxiosRequestConfig).then(
+      response => response.data as T,
+    );
+  },
+  put: <T>(
+    url: string,
+    data?: Record<string, string | number | boolean | null>,
+    config?: Partial<InternalAxiosRequestConfig>,
+  ) => {
+    return api.put<T, AxiosResponse<T>>(url, data, config as InternalAxiosRequestConfig).then(
+      response => response.data as T,
+    );
+  },
+  delete: <T>(url: string, config?: Partial<InternalAxiosRequestConfig>) => {
+    return api.delete<T, AxiosResponse<T>>(url, config as InternalAxiosRequestConfig).then(
+      response => response.data as T,
+    );
+  },
+  patch: <T>(
+    url: string,
+    data?: Record<string, string | number | boolean | null>,
+    config?: Partial<InternalAxiosRequestConfig>,
+  ) => {
+    return api.patch<T, AxiosResponse<T>>(url, data, config as InternalAxiosRequestConfig).then(
+      response => response.data as T,
+    );
+  },
+};
+
+export default typedApi;
