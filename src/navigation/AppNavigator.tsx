@@ -1,42 +1,136 @@
 /**
  * 应用导航配置
  * 使用 React Navigation 进行页面路由管理
+ * 底部导航栏 + Stack 导航
  */
 
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
 import { DetailsScreen } from '../screens/DetailsScreen';
-
+import PreviewIcon from '../screens/PreviewIcon';
+import FindHouse from '../screens/FindHouse';
+import LatestNews from '../screens/LatestNews';
+import Profile from '../screens/Profile';
+import MyMap from '../screens/MyMap';
+import PublishHouse from '../screens/PublishHouse';
+import IconFont from '../components/IconFont';
+import { colors } from '../theme/colors';
+import { fontSize, fontWeight, spacing } from '../theme';
 // 定义导航参数类型
 export type RootStackParamList = {
-  Home: undefined;
+  MainTabs: undefined;
   Details: { itemId: number; title?: string };
+  PreviewIcon: undefined;
+  MyMap: undefined;
+  PublishHouse: undefined;
+};
+
+export type TabParamList = {
+  Home: React.ComponentType<any>;
+  FindHouse: React.ComponentType<any>;
+  LatestNews: React.ComponentType<any>;
+  Profile: React.ComponentType<any>;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator<TabParamList>();
+const list: Array<{
+  name: keyof TabParamList;
+  title: string;
+  icon: string;
+  component: React.ComponentType<any>;
+}> = [
+  {
+    name: 'Home',
+    title: '首页',
+    icon: 'ind',
+    component: HomeScreen,
+  },
+  {
+    name: 'FindHouse',
+    title: '找房',
+    icon: 'findHouse',
+    component: FindHouse,
+  },
+  {
+    name: 'LatestNews',
+    title: '最新资讯',
+    icon: 'infom',
+    component: LatestNews,
+  },
+  {
+    name: 'Profile',
+    title: '个人中心',
+    icon: 'myinfo',
+    component: Profile,
+  },
+];
 
-export function AppNavigator(): React.JSX.Element {
+// Tab 图标组件工厂函数
+const createTabIcon =
+  (iconName: string) =>
+  ({ color }: { color: string }): React.JSX.Element =>
+    <IconFont name={iconName} size={fontSize.lg} color={color} />;
+
+// 底部导航栏
+const TabNavigator = (): React.JSX.Element => {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false, // 隐藏 Tab 导航的 header
+        tabBarActiveTintColor: colors.primaryLight,
+        tabBarInactiveTintColor: colors.textTertiary,
+        tabBarLabelStyle: {
+          fontSize: fontSize.xs,
+          fontWeight: fontWeight.medium,
+        },
+        tabBarStyle: {
+          paddingBottom: spacing.xl,
+          paddingTop: spacing.xs,
+          height: 60,
+        },
+      }}
+    >
+      {list.map(({ name, title, icon, component }) => (
+        <Tab.Screen
+          key={name}
+          name={name}
+          component={component}
+          options={{
+            title: title,
+            tabBarLabel: title,
+            tabBarIcon: createTabIcon(icon),
+          }}
+        />
+      ))}
+    </Tab.Navigator>
+  );
+};
+
+// 主导航器（Stack + Tab）
+export const AppNavigator = (): React.JSX.Element => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="Home"
         screenOptions={{
           headerStyle: {
-            backgroundColor: '#6200ee',
+            backgroundColor: colors.primaryLight,
           },
-          headerTintColor: '#fff',
+          headerTintColor: colors.textWhite,
           headerTitleStyle: {
-            fontWeight: 'bold',
+            fontWeight: fontWeight.bold,
+            fontSize: fontSize.base,
           },
         }}
       >
         <Stack.Screen
-          name="Home"
-          component={HomeScreen}
+          name="MainTabs"
+          component={TabNavigator}
           options={{
-            title: '首页',
+            headerShown: false, // 隐藏 Stack 的 header，使用 Tab 的 header
           }}
         />
         <Stack.Screen
@@ -46,7 +140,28 @@ export function AppNavigator(): React.JSX.Element {
             title: '详情页',
           }}
         />
+        <Stack.Screen
+          name="PreviewIcon"
+          component={PreviewIcon}
+          options={{
+            title: '图标预览',
+          }}
+        />
+        <Stack.Screen
+          name="MyMap"
+          component={MyMap}
+          options={{
+            title: '地图找房',
+          }}
+        />
+        <Stack.Screen
+          name="PublishHouse"
+          component={PublishHouse}
+          options={{
+            title: '发布房源',
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};

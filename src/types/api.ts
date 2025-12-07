@@ -3,11 +3,33 @@
  */
 
 // API 响应基础结构
-export interface ApiResponse<T = unknown> {
-  code: number;
-  data: T;
-  message: string;
-}
+// 支持多种格式：直接返回数据、或包装在 body/data 中
+export type ApiResponse<T = unknown> = T; // 直接返回数据（如数组）
+
+// // 从 ApiResponse 中提取实际数据的辅助类型
+// export type ExtractApiData<T> = T extends { body: infer U }
+//   ? U
+//   : T extends { data: infer U }
+//   ? U
+//   : T;
+
+// // 从 ApiResponse 中提取实际数据的辅助函数
+// export function extractApiData<T>(response: ApiResponse<T>): T {
+//   // 如果 response 本身就是数组或基本类型，直接返回
+//   if (!response || typeof response !== 'object' || Array.isArray(response)) {
+//     return response as T;
+//   }
+//   // 检查是否有 body 属性
+//   if ('body' in response) {
+//     return (response as { body: T }).body;
+//   }
+//   // 检查是否有 data 属性
+//   if ('data' in response) {
+//     return (response as { data: T }).data;
+//   }
+//   // 否则直接返回（可能是直接的数据）
+//   return response as T;
+// }
 
 // 登录请求参数
 export interface LoginRequest {
@@ -22,21 +44,21 @@ export interface LoginResponse {
 }
 
 // 用户信息
-export interface User {
+export type User = Readonly<{
   id: string;
   name: string;
   email: string;
-  avatar?: string;
+  avatar: string;
   phone?: string;
-}
+}>;
 
 // 更新用户信息请求
-export interface UpdateUserRequest {
-  name?: string;
-  email?: string;
-  avatar?: string;
-  phone?: string;
-}
+export const UpdateUserRequest = Partial<{
+  name: string;
+  email: string;
+  avatar: string;
+  phone: string;
+}>;
 
 // 房屋信息
 export interface House {
@@ -54,14 +76,14 @@ export interface House {
 }
 
 // 房屋列表查询参数
-export interface HouseListParams {
-  page?: number;
-  pageSize?: number;
-  city?: string;
-  priceRange?: string;
-  areaRange?: string;
-  keyword?: string;
-}
+export type HouseListParams = Partial<{
+  page: number;
+  pageSize: number;
+  city: string;
+  priceRange: string;
+  areaRange: string;
+  keyword: string;
+}>;
 
 // 房屋列表响应
 export interface HouseListResponse {
@@ -84,4 +106,28 @@ export interface PaginatedResponse<T> {
   total: number;
   page: number;
   pageSize: number;
+}
+
+// 菜单项
+export interface MenuItem {
+  name: string;
+  icon: string;
+  navigator: string;
+}
+
+// 租房小组
+export interface Group {
+  id: number;
+  title: string;
+  desc: string;
+  imgSrc: string;
+}
+
+// 新闻
+export interface News {
+  id: number;
+  title: string;
+  imgSrc: string;
+  from: string;
+  date: string;
 }

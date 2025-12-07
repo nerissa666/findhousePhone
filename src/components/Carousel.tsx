@@ -15,9 +15,10 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import api from '../services/api';
-
+import { ApiResponse } from '../types/api';
+import { getImageUrl } from '../utils/image';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const CAROUSEL_HEIGHT = 200;
+const CAROUSEL_HEIGHT = 240;
 
 // 轮播图数据类型
 interface SwiperItem {
@@ -40,20 +41,13 @@ export default function Carousel(): React.JSX.Element {
         setLoading(true);
         setError(null);
         // 直接调用 API，处理特殊响应格式
-        // 响应拦截器会返回 data，可能是 { description, status, body } 格式
-        const response = await api.get<any>('/home/swiper');
-        // 处理响应数据：可能是 { description, status, body } 格式
-        let data: SwiperItem[] = [];
-        if (response && typeof response === 'object') {
-          // 检查是否是 { body: [...] } 格式
-          if ('body' in response && Array.isArray(response.body)) {
-            data = response.body;
-          } else if (Array.isArray(response)) {
-            // 如果响应拦截器已经处理成数组
-            data = response;
-          }
-        }
-        setSwiperData(data);
+        // 响应拦截器会返回 body，body 中包含实际的数组数据
+        const response = (await api.get('/home/swiper')) as ApiResponse<
+          SwiperItem[]
+        >;
+        // // 使用辅助函数提取数据，自动处理各种格式
+        // const data = extractApiData<SwiperItem[]>(response);
+        setSwiperData(response);
       } catch (err) {
         setError(err instanceof Error ? err.message : '加载轮播图失败');
         console.error('获取轮播图失败:', err);
@@ -88,24 +82,11 @@ export default function Carousel(): React.JSX.Element {
     setCurrentIndex(index);
   };
 
-  // 拼接图片 URL（imgSrc 是相对路径，需要拼接基础 URL）
-  const getImageUrl = (imgSrc: string): string => {
-    // 如果已经是完整 URL，直接返回
-    if (imgSrc.startsWith('http://') || imgSrc.startsWith('https://')) {
-      return imgSrc;
-    }
-    // 从配置文件获取图片基础 URL
-    const { IMAGE_BASE_URL } = require('../config/env');
-    const baseUrl = IMAGE_BASE_URL;
-    const path = imgSrc.startsWith('/') ? imgSrc : `/${imgSrc}`;
-    return `${baseUrl}${path}`;
-  };
-
   // 加载状态
   if (loading) {
     return (
       <View style={[styles.container, styles.centerContent]}>
-        <ActivityIndicator size="large" color="#6200ee" />
+        <ActivityIndicator size="large" />
         <Text style={styles.loadingText}>加载中...</Text>
       </View>
     );

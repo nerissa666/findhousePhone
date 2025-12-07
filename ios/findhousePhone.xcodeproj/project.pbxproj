@@ -8,10 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		0C80B921A6F3F58F76C31292 /* libPods-findhousePhone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-findhousePhone.a */; };
+		0FE096FCF4CB442B80D50607 /* iconfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F63976127B234A6D907BCFD0 /* iconfont.ttf */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		3B5044A1E00144DE9835C0C5 /* iconfont.woff in Resources */ = {isa = PBXBuildFile; fileRef = BB1A5D642B8541BE8F56617D /* iconfont.woff */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		B4842C482EC249EC9CE6002E /* iconfont.eot in Resources */ = {isa = PBXBuildFile; fileRef = D59267AAA58B4AB9A90620C0 /* iconfont.eot */; };
+		C0E184C01A0A4432BDC0806A /* iconfont.svg in Resources */ = {isa = PBXBuildFile; fileRef = E742CA921A6C4F688DDB6EED /* iconfont.svg */; };
 		C365642C45789D4A95B8F409 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		CBDE243956D84C048B7C3DBE /* iconfont.css in Resources */ = {isa = PBXBuildFile; fileRef = 92499F182D1D4958BB8B4A81 /* iconfont.css */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,7 +29,12 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-findhousePhone.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-findhousePhone.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = findhousePhone/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = findhousePhone/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		92499F182D1D4958BB8B4A81 /* iconfont.css */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = iconfont.css; path = ../assets/fonts/iconfont.css; sourceTree = "<group>"; };
+		BB1A5D642B8541BE8F56617D /* iconfont.woff */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = iconfont.woff; path = ../assets/fonts/iconfont.woff; sourceTree = "<group>"; };
+		D59267AAA58B4AB9A90620C0 /* iconfont.eot */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = iconfont.eot; path = ../assets/fonts/iconfont.eot; sourceTree = "<group>"; };
+		E742CA921A6C4F688DDB6EED /* iconfont.svg */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = iconfont.svg; path = ../assets/fonts/iconfont.svg; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F63976127B234A6D907BCFD0 /* iconfont.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = iconfont.ttf; path = ../assets/fonts/iconfont.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +61,19 @@
 			name = findhousePhone;
 			sourceTree = "<group>";
 		};
+		14E99EED90A6498BB75A3C61 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D59267AAA58B4AB9A90620C0 /* iconfont.eot */,
+				E742CA921A6C4F688DDB6EED /* iconfont.svg */,
+				BB1A5D642B8541BE8F56617D /* iconfont.woff */,
+				F63976127B234A6D907BCFD0 /* iconfont.ttf */,
+				92499F182D1D4958BB8B4A81 /* iconfont.css */,
+			);
+			name = Resources;
+			path = "";
+			sourceTree = "<group>";
+		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -75,6 +98,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				14E99EED90A6498BB75A3C61 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -161,6 +185,11 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				C365642C45789D4A95B8F409 /* PrivacyInfo.xcprivacy in Resources */,
+				B4842C482EC249EC9CE6002E /* iconfont.eot in Resources */,
+				C0E184C01A0A4432BDC0806A /* iconfont.svg in Resources */,
+				3B5044A1E00144DE9835C0C5 /* iconfont.woff in Resources */,
+				0FE096FCF4CB442B80D50607 /* iconfont.ttf in Resources */,
+				CBDE243956D84C048B7C3DBE /* iconfont.css in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
