@@ -5,7 +5,7 @@
 
 export const colors = {
   // 主题颜色
-  primary: '#21b97a',
+  primaryLighterprimary: '#21b97a',
   primaryDark: '#1a8f5e',
   primaryLight: '#4dd4a3',
   primaryLighter: '#e8f5f0', // 最浅色，用于浅色背景

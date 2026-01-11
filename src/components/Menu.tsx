@@ -13,11 +13,17 @@ export default function Menu({
   const navigation = useNavigation();
   return (
     <View className="flex-row justify-around items-center p-4 border-t border-gray-200">
-      {list.map(({ name, icon, navigator }) => (
+      {list.map(({ name, icon, navigator, params }) => (
         <Pressable
           key={name}
           className="items-center active:opacity-70"
-          onPress={() => navigation.navigate(navigator as never)}
+          onPress={() => {
+            if (params) {
+              navigation.navigate(navigator as never, params as never);
+            } else {
+              navigation.navigate(navigator as never);
+            }
+          }}
         >
           <View className="bg-green-50 p-3 rounded-full mb-2">
             <IconFont name={icon} size={fontSize.lg} color={colors.primary} />

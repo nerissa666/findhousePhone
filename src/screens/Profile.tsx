@@ -1,12 +1,19 @@
-import React from 'react';
-import { View, Text, Pressable } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, Pressable, StyleSheet, ScrollView, Image } from 'react-native';
 import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import type { CompositeScreenProps } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type {
   RootStackParamList,
   TabParamList,
-} from '@/navigation/AppNavigator';
+} from '../navigation/AppNavigator';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../store/store';
+import { fetchUserInfo, logoutUser } from '../store/slices/userSlice';
+import { colors } from '../theme/colors';
+import { fontSize, spacing, borderRadius } from '../theme';
+import { Button } from 'react-native-paper';
+import { getImageUrl } from '../utils/image';
 
 type ProfileScreenProps = CompositeScreenProps<
   BottomTabScreenProps<TabParamList, 'Profile'>,
@@ -14,56 +21,203 @@ type ProfileScreenProps = CompositeScreenProps<
 >;
 
 export default function Profile({ navigation }: ProfileScreenProps) {
+  const dispatch = useDispatch<AppDispatch>();
+  const { user, isAuthenticated, loading } = useSelector((state: RootState) => state.user);
+
+  useEffect(() => {
+    if (isAuthenticated && !user) {
+      dispatch(fetchUserInfo());
+    }
+  }, [isAuthenticated, dispatch]);
+
+  const handleLogin = () => {
+    navigation.navigate('Login');
+  };
+
+  const handleRegister = () => {
+    navigation.navigate('Register');
+  };
+
+  const handleLogout = async () => {
+    await dispatch(logoutUser());
+  };
+
   return (
-    <View className="flex-1 bg-gray-50 p-4">
-      <Text className="text-2xl font-bold text-gray-800 mb-6">个人中心</Text>
-
-      <View className="bg-white rounded-lg p-4 shadow-sm mb-4">
-        {/* 图标预览入口 */}
-        <Pressable
-          onPress={() => navigation.navigate('PreviewIcon')}
-          className="flex-row items-center justify-between py-3 border-b border-gray-100"
-        >
-          <View className="flex-row items-center">
-            <View className="w-10 h-10 bg-green-100 rounded-full items-center justify-center mr-3">
-              <Text className="text-green-600 text-lg">🎨</Text>
-            </View>
-            <View>
-              <Text className="text-base font-medium text-gray-800">
-                图标预览
-              </Text>
-              <Text className="text-sm text-gray-500 mt-1">
-                查看所有可用的图标
-              </Text>
-            </View>
+    <ScrollView style={styles.container}>
+      {isAuthenticated && user ? (
+        <View style={styles.content}>
+          <View style={styles.userInfo}>
+            <Image
+              source={{ uri: user.avatar ? getImageUrl(user.avatar) : 'https://via.placeholder.com/80' }}
+              style={styles.avatar}
+            />
+            <Text style={styles.userName}>{user.name}</Text>
+            {user.email && <Text style={styles.userEmail}>{user.email}</Text>}
+            {user.phone && <Text style={styles.userPhone}>{user.phone}</Text>}
           </View>
-          <Text className="text-gray-400">›</Text>
-        </Pressable>
 
-        {/* 详情页入口 */}
-        <Pressable
-          onPress={() =>
-            navigation.navigate('Details', {
-              itemId: 123,
-              title: '示例详情页',
-            })
-          }
-          className="flex-row items-center justify-between py-3"
-        >
-          <View className="flex-row items-center">
-            <View className="w-10 h-10 bg-blue-100 rounded-full items-center justify-center mr-3">
-              <Text className="text-blue-600 text-lg">📄</Text>
-            </View>
-            <View>
-              <Text className="text-base font-medium text-gray-800">
-                详情页
-              </Text>
-              <Text className="text-sm text-gray-500 mt-1">查看详情页示例</Text>
-            </View>
+          <View style={styles.menuSection}>
+            <Pressable
+              style={styles.menuItem}
+              onPress={() => navigation.navigate('Favorites')}
+            >
+              <Text style={styles.menuText}>我的收藏</Text>
+              <Text style={styles.menuArrow}>›</Text>
+            </Pressable>
+
+            <Pressable
+              style={styles.menuItem}
+              onPress={() => navigation.navigate('MyHouses')}
+            >
+              <Text style={styles.menuText}>我的房源</Text>
+              <Text style={styles.menuArrow}>›</Text>
+            </Pressable>
+
+            <Pressable
+              style={styles.menuItem}
+              onPress={() => navigation.navigate('PreviewIcon')}
+            >
+              <Text style={styles.menuText}>图标预览</Text>
+              <Text style={styles.menuArrow}>›</Text>
+            </Pressable>
           </View>
-          <Text className="text-gray-400">›</Text>
-        </Pressable>
-      </View>
-    </View>
+
+          <Button
+            mode="outlined"
+            onPress={handleLogout}
+            style={styles.logoutButton}
+            textColor={colors.textPrimary}
+          >
+            退出登录
+          </Button>
+        </View>
+      ) : (
+        <View style={styles.content}>
+          <View style={styles.loginPrompt}>
+            <Text style={styles.loginTitle}>欢迎使用租房App</Text>
+            <Text style={styles.loginSubtitle}>登录后可以查看收藏、发布房源等功能</Text>
+          </View>
+
+          <Button
+            mode="contained"
+            onPress={handleLogin}
+            style={styles.loginButton}
+            buttonColor={colors.primaryLighterprimary}
+            textColor={colors.textWhite}
+          >
+            登录
+          </Button>
+
+          <Button
+            mode="outlined"
+            onPress={handleRegister}
+            style={styles.registerButton}
+            textColor={colors.primaryLighterprimary}
+          >
+            注册
+          </Button>
+
+          <View style={styles.menuSection}>
+            <Pressable
+              style={styles.menuItem}
+              onPress={() => navigation.navigate('PreviewIcon')}
+            >
+              <Text style={styles.menuText}>图标预览</Text>
+              <Text style={styles.menuArrow}>›</Text>
+            </Pressable>
+          </View>
+        </View>
+      )}
+    </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.bgPrimary,
+  },
+  content: {
+    padding: spacing.lg,
+  },
+  userInfo: {
+    alignItems: 'center',
+    paddingVertical: spacing.xl,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderLight,
+    marginBottom: spacing.lg,
+  },
+  avatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    marginBottom: spacing.md,
+    backgroundColor: colors.bgSecondary,
+  },
+  userName: {
+    fontSize: fontSize.xl,
+    fontWeight: 'bold',
+    color: colors.textPrimary,
+    marginBottom: spacing.xs,
+  },
+  userEmail: {
+    fontSize: fontSize.base,
+    color: colors.textSecondary,
+    marginTop: spacing.xs,
+  },
+  userPhone: {
+    fontSize: fontSize.base,
+    color: colors.textSecondary,
+    marginTop: spacing.xs,
+  },
+  loginPrompt: {
+    alignItems: 'center',
+    paddingVertical: spacing.xl,
+    marginBottom: spacing.xl,
+  },
+  loginTitle: {
+    fontSize: fontSize.xl,
+    fontWeight: 'bold',
+    color: colors.textPrimary,
+    marginBottom: spacing.sm,
+  },
+  loginSubtitle: {
+    fontSize: fontSize.base,
+    color: colors.textSecondary,
+    textAlign: 'center',
+  },
+  loginButton: {
+    marginBottom: spacing.md,
+    paddingVertical: spacing.xs,
+  },
+  registerButton: {
+    marginBottom: spacing.lg,
+    paddingVertical: spacing.xs,
+  },
+  logoutButton: {
+    marginTop: spacing.xl,
+    paddingVertical: spacing.xs,
+  },
+  menuSection: {
+    backgroundColor: colors.bgPrimary,
+    borderRadius: borderRadius.md,
+    marginTop: spacing.lg,
+  },
+  menuItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderLight,
+  },
+  menuText: {
+    fontSize: fontSize.base,
+    color: colors.textPrimary,
+  },
+  menuArrow: {
+    fontSize: fontSize.xl,
+    color: colors.textTertiary,
+  },
+});

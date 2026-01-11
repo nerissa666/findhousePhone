@@ -11,8 +11,11 @@ import React from 'react';
 import { StatusBar, useColorScheme } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
+import { PaperProvider } from 'react-native-paper';
 import { AppNavigator } from './src/navigation/AppNavigator';
 import { store } from './src/store/store';
+import { TamaguiProvider } from '@tamagui/core';
+import config from './tamagui.config.ts';
 import './global.css';
 
 // 注意：LogBox 配置已在 index.js 中设置（在应用启动前）
@@ -26,8 +29,12 @@ function App(): React.JSX.Element {
   return (
     <Provider store={store}>
       <SafeAreaProvider>
-        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-        <AppNavigator />
+        <TamaguiProvider config={config} defaultTheme="light">
+          <PaperProvider>
+            <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+            <AppNavigator />
+          </PaperProvider>
+        </TamaguiProvider>
       </SafeAreaProvider>
     </Provider>
   );

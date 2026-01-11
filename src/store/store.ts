@@ -6,11 +6,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import counterReducer from './slices/counterSlice';
 import userReducer from './slices/userSlice';
+import paramsReducer from './slices/paramsSlice';
+import cityReducer from './slices/citySlice';
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
     user: userReducer,
+    params: paramsReducer,
+    city: cityReducer,
   },
   // 开发环境启用 Redux DevTools
   middleware: getDefaultMiddleware =>

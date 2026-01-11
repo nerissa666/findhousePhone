@@ -37,10 +37,23 @@ export interface LoginRequest {
   password: string;
 }
 
+// 注册请求参数
+export interface RegisterRequest {
+  username: string;
+  password: string;
+}
+
 // 登录响应数据
 export interface LoginResponse {
   token: string;
   user: User;
+}
+
+// 注册响应数据
+export interface RegisterResponse {
+  token?: string;
+  user?: User;
+  message?: string;
 }
 
 // 用户信息
@@ -53,26 +66,40 @@ export type User = Readonly<{
 }>;
 
 // 更新用户信息请求
-export const UpdateUserRequest = Partial<{
+export type UpdateUserRequest = Partial<{
   name: string;
   email: string;
   avatar: string;
   phone: string;
 }>;
 
+// 查询房屋入参信息
+type BaseHouseQueryParams = {
+  cityId: string;
+  area: string;
+  subway: string;
+  rentType: boolean;
+  price: number;
+  more: string;
+  roomType: string;
+  oriented: string;
+  characteristic: string;
+  floor: string;
+  end: number;
+  start: number;
+}
+export type HouseQueryParams =
+  { cityId: string } &
+  Partial<Omit<BaseHouseQueryParams, 'cityId'>>;
+
 // 房屋信息
 export interface House {
-  id: string | number;
+  houseImg: string;
   title: string;
-  description?: string;
+  tags: string[];
   price: number;
-  city: string;
-  address: string;
-  area: number;
-  rooms?: number;
-  images?: string[];
-  createdAt?: string;
-  updatedAt?: string;
+  desc: string;
+  houseCode: string;
 }
 
 // 房屋列表查询参数
@@ -85,8 +112,14 @@ export type HouseListParams = Partial<{
   keyword: string;
 }>;
 
-// 房屋列表响应
+// 房屋列表响应（根据后端实际返回结构）
 export interface HouseListResponse {
+  list: House[];
+  count: number; // 后端返回的是 count，不是 total
+}
+
+// 房屋列表响应（标准分页格式，如果后端支持）
+export interface HouseListResponsePaginated {
   list: House[];
   total: number;
   page: number;
@@ -113,6 +146,7 @@ export interface MenuItem {
   name: string;
   icon: string;
   navigator: string;
+  params?: Record<string, any>;
 }
 
 // 租房小组
@@ -130,4 +164,10 @@ export interface News {
   imgSrc: string;
   from: string;
   date: string;
+}
+
+// 收藏响应
+export interface FavoriteResponse {
+  isFavorite?: boolean;
+  message?: string;
 }

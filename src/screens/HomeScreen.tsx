@@ -26,11 +26,13 @@ const list = [
     name: '整租',
     icon: '房子',
     navigator: 'FindHouse',
+    params: { rentType: 'true' },
   },
   {
     name: '合租',
     icon: 'my',
     navigator: 'FindHouse',
+    params: { rentType: 'false' },
   },
   {
     name: '地图找房',

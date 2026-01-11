@@ -1,3 +1,4 @@
+// import { tamaguiPlugin } from '@tamagui/vite-plugin-tamagui'
 const path = require('path');
 
 module.exports = {
@@ -23,6 +24,10 @@ module.exports = {
           '.ts',
         ],
       },
+      // tamaguiPlugin({
+      //   config: './src/tamagui.config.ts',
+      //   outputCSS: './src/tamagui.css',
+      // }),
     ],
     'react-native-worklets/plugin',
   ],
