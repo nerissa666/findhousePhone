@@ -93,11 +93,6 @@ export default function IconFont({
 }: IconFontProps): React.JSX.Element {
   const unicode = iconMap[name];
   if (!unicode) {
-    console.warn(
-      `IconFont: 图标 "${name}" 不存在`,
-      `\n传入的 name: "${name}" (类型: ${typeof name}, 长度: ${name?.length})`,
-      `\n可用图标: ${Object.keys(iconMap).slice(0, 10).join(', ')}...`,
-    );
     return <Text>?</Text>;
   }
 

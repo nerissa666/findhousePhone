@@ -1,9 +1,22 @@
-import { View, Text } from 'react-native';
+import React from 'react';
+import { StyleSheet, ScrollView, View } from 'react-native';
+import News from '../components/News';
 
 export default () => {
   return (
-    <View>
-      <Text>最新资讯</Text>
-    </View>
+    <ScrollView style={styles.container} className="bg-white">
+      <View style={styles.content}>
+        <News />
+      </View>
+    </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  content: {
+    padding: 16,
+  },
+});

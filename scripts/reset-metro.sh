@@ -38,3 +38,8 @@ echo "  pnpm start --reset-cache"
 echo "或者"
 echo "  npx react-native start --reset-cache"
 
+
+
+
+
+

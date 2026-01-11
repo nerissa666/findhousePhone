@@ -20,23 +20,69 @@ import type {
 export const userApi = {
   // 登录
   login: async (username: string, password: string): Promise<LoginResponse> => {
-    const response = await api.post<ApiResponse<LoginResponse>>('/auth/login', {
+    const response = await api.post<LoginResponse>('/user/login', {
       username,
       password,
     } as LoginRequest);
-    return response as unknown as LoginResponse;
+    const data = (response as any).body || response;
+    return {
+      token: data.token || data.body?.token || '',
+      user: data.user || data.body?.user || data,
+    } as LoginResponse;
   },
 
   // 获取用户信息
   getUserInfo: async (): Promise<User> => {
-    const response = await api.get<ApiResponse<User>>('/user/info');
-    return response as unknown as User;
+    const response = await api.get<User>('/user');
+    const data = (response as any).body || response;
+    return data as User;
   },
 
   // 更新用户信息
   updateUserInfo: async (data: UpdateUserRequest): Promise<User> => {
-    const response = await api.put<ApiResponse<User>>('/user/info', data);
-    return response as unknown as User;
+    const response = await api.patch<User>('/user', data);
+    const result = (response as any).body || response;
+    return result as User;
+  },
+
+  // 获取收藏列表
+  getFavorites: async (): Promise<House[]> => {
+    const response = await api.get<House[]>('/user/favorites');
+    const data = (response as any).body || response;
+    return Array.isArray(data) ? data : (data.list || []);
+  },
+
+  // 检查是否收藏
+  checkFavorite: async (houseId: string): Promise<boolean> => {
+    try {
+      const response = await api.get<{ isFavorite?: boolean }>(`/user/favorites/${houseId}`);
+      const data = (response as any).body || response;
+      return data.isFavorite === true;
+    } catch (error) {
+      return false;
+    }
+  },
+
+  // 添加收藏
+  addFavorite: async (houseId: string): Promise<void> => {
+    await api.post(`/user/favorites/${houseId}`);
+  },
+
+  // 删除收藏
+  removeFavorite: async (houseId: string): Promise<void> => {
+    await api.delete(`/user/favorites/${houseId}`);
+  },
+
+  // 获取已发布房源列表
+  getMyHouses: async (): Promise<House[]> => {
+    const response = await api.get<House[]>('/user/houses');
+    const data = (response as any).body || response;
+    return Array.isArray(data) ? data : (data.list || []);
+  },
+
+  // 上下架房源
+  toggleHouseShelf: async (houseId: string, shelf: boolean): Promise<void> => {
+    await api.patch(`/user/houses/${houseId}`, { shelf });
   },
 };
 

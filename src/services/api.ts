@@ -35,8 +35,8 @@ api.interceptors.request.use(
       const token = await AsyncStorage.getItem(TOKEN_KEY);
 
       if (token && config.headers) {
-        // 添加 Authorization header
-        config.headers.Authorization = `Bearer ${token}`;
+        // 添加 Authorization header (根据 Swagger 文档，使用 authorization 而不是 Authorization)
+        config.headers.authorization = token;
       }
     } catch (error) {
       console.error('获取 token 失败:', error);

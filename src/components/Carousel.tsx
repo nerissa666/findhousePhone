@@ -13,6 +13,7 @@ import {
   Image,
   Dimensions,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import api from '../services/api';
 import { ApiResponse } from '../types/api';
@@ -49,8 +50,9 @@ export default function Carousel(): React.JSX.Element {
         // const data = extractApiData<SwiperItem[]>(response);
         setSwiperData(response);
       } catch (err) {
-        setError(err instanceof Error ? err.message : '加载轮播图失败');
-        console.error('获取轮播图失败:', err);
+        const errorMessage = err instanceof Error ? err.message : '加载轮播图失败';
+        setError(errorMessage);
+        Alert.alert('错误', errorMessage);
       } finally {
         setLoading(false);
       }

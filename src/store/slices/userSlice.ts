@@ -36,14 +36,13 @@ export const loginUser = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-      // 这里调用的是真正的后端接口：POST /auth/login
+      // 这里调用的是真正的后端接口：POST /user/login
       // 定义在 src/services/apiService.ts 的 userApi.login()
-      const response = (await userApi.login(username, password)) as unknown as {
-        token: string;
-        user: User;
-      };
+      const response = await userApi.login(username, password);
       // 保存 token 到本地存储
-      await tokenManager.setToken(response.token);
+      if (response.token) {
+        await tokenManager.setToken(response.token);
+      }
       return response.user;
     } catch (error) {
       // 返回错误信息，而不是抛出异常
